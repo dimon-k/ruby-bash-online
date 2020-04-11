@@ -1,0 +1,26 @@
+<p>You simple Ruby bash!</p>
+<p>version 2.6.5</p>
+<div>
+  <%= text_area_tag 'post', nil, rows: 20, cols: 150, id: 'ruby_code' %>
+</div>
+<%= submit_tag 'Execute', onclick: 'return postCode();' %>
+<div id='result_ruby_code' style='background-color: lightgray;width: 772px;min-height: 18px;'></div>
+
+<script>
+  const Url = "<%= api_ruby_bash_run_code_path %>"
+
+  postCode = () => {
+    fetch(Url, { method: 'post', body: document.getElementById('ruby_code').value })
+      .then(resp => {
+        return resp.json();
+      })
+      .then(data => {
+        console.log(data)
+        data['puts'].forEach(function(put) {
+          document.getElementById('result_ruby_code').innerHTML += put + '<br/>'
+        });
+        document.getElementById('result_ruby_code').innerHTML += '=> ' + data['result'] + '<br/>'
+      });
+  }
+</script>
+
